@@ -18,35 +18,7 @@ mongoose.connection.on('connected', () => {
   console.log('connected to DB');
 })
 
-const Post = mongoose.model('Post');
-
-app.get('/posts', async (request, response) => {
-  const posts = await Post.find();
-  response.send(posts);
-})
-
-app.get('/posts/:id', async (request, response) => {
-  try {
-    const post = await Post.findById(request.params.id);
-    response.send(post);
-  } catch(e) {
-    response.status(400).send({message: e.message})
-  }
-})
-
-app.post('/posts', async (request, response) => {
-  const post = new Post ({
-    title: request.body.title,
-    body: request.body.body
-  });
-
-  try {
-    await post.save();
-    response.send(post);
-  } catch (e) {
-    response.status(400).send({message: e.mesage})
-  }
-})
+app.use('/posts', require('./routes/posts'));
 
 app.delete('/posts/:id', (request, response) => {
 
