@@ -5,8 +5,12 @@ const router = express.Router();
 const Post = mongoose.model('Post');
 
 router.get('/', async (request, response) => {
-  const posts = await Post.find();
-  response.send(posts);
+  try {
+    const posts = await Post.find();
+    response.send(posts);
+  } catch (e) {
+    response.status(400).send({message: e.message})
+  }
 });
 
 router.get('/:id', async (request, response) => {

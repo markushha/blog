@@ -20,10 +20,6 @@ mongoose.connection.on('connected', () => {
 
 app.use('/posts', require('./routes/posts'));
 
-app.delete('/posts/:id', (request, response) => {
-
-})
-
 app.listen(3004, () => {
   console.log('Server is running on http://localhost:3004')
 })

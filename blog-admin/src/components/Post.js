@@ -3,7 +3,7 @@ import { usePosts } from "../hooks/posts";
 import { Link } from "react-router-dom";
 
 function Post({ title, body, date, id }) {
-  const { onDeleteHandler, onUpdateHandler } = usePosts();
+  const { onDeleteHandler } = usePosts({});
 
   return (
     <>
@@ -11,11 +11,11 @@ function Post({ title, body, date, id }) {
         <td data-label="Post Nmae">{title}</td>
         <td data-label="Date">{date}</td>
         <td data-label="Actions">
-          <Link to="/update">
+          <Link to={`/posts/${id}`}>
             <button
               className="ui inverted green button"
               onClick={() => {
-                onUpdateHandler(id, title, body);
+                
               }}
             >
               Edit

@@ -1,42 +1,43 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import PostForm from "../components/PostForm";
+import client from '../client';
 
-function EditPost({ title, body, id }) {
+function EditPost() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [post, setPost] = useState();
+  const params = useParams();
+
+  useEffect(() => {
+    client.get(`/posts/${params.id}`)
+      .then((res) => {
+        setPost(res.data);
+        setLoading(false);
+      })
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <div className="ui text active loader">Loading...</div>
+    )
+  }
+
+  const handleSubmit = ({ title, body }) => {
+    client.patch(`/posts/${params.id}`, { title, body })
+      .then(() => navigate(-1))
+  }
+
   return (
     <div>
-      <Link to="/">
         <button
           className="ui inverted secondary button"
-          style={{ margin: "0px 0px 20px 0" }}
+          onClick={() => navigate(-1)}
         >
           Go back
         </button>
-      </Link>
-      <form
-        class="ui form"
-        onSubmit={() => {
-        }}
-      >
-        <div class="field">
-          <label>Title</label>
-          <input
-            type="text"
-            value={title}
-            onChange={() => {
-            }}
-          />
-        </div>
-        <div class="field">
-          <label>Body</label>
-          <textarea
-            type="text"
-            value={body}
-            onChange={() => {
-            }}
-          />
-        </div>
-        <button className="ui inverted green button">Save Changes</button>
-      </form>
+        <h1 className="ui header">Edit Post</h1>
+        <PostForm initialValues={post} onSubmit={handleSubmit} />
     </div>
   );
 }
